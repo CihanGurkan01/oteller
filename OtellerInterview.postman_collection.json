@@ -1,0 +1,366 @@
+{
+	"info": {
+		"_postman_id": "5673001a-039e-46a0-99df-f0328cc8c91a",
+		"name": "OtellerInterview",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11754483"
+	},
+	"item": [
+		{
+			"name": "Hotel",
+			"item": [
+				{
+					"name": "findAllHotels",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/hotel-service/api/v1/hotels/findAll?page=0&size=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"hotel-service",
+								"api",
+								"v1",
+								"hotels",
+								"findAll"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Otels Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Cihan Hotels\",\r\n    \"starRating\": 5,\r\n    \"address\": {\r\n      \"addressStreet\": \"Caddesi\",\r\n      \"addressCity\": \"Istanbul\",\r\n      \"addressCountry\": \"Türkiye\",\r\n      \"addressFullAddress\": \"Beşiktaş, Istanbul\"\r\n    },\r\n    \"rooms\":[\r\n        {\r\n        \"roomNumber\": \"101\",\r\n        \"capacity\": 2,\r\n        \"pricePerNight\": 100.0,\r\n        \"description\": \"Deniz manzaralı oda\"\r\n        },\r\n        {\r\n        \"roomNumber\": \"102\",\r\n        \"capacity\": 3,\r\n        \"pricePerNight\": 200.0,\r\n        \"description\": \"Deniz manzaralı oda 2\"\r\n        }\r\n    ]\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/hotel-service/api/v1/hotels/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"hotel-service",
+								"api",
+								"v1",
+								"hotels",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Otels Create Without Room",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Cihan Hotels\",\r\n    \"starRating\": 5,\r\n    \"address\": {\r\n      \"addressStreet\": \"Caddesi\",\r\n      \"addressCity\": \"Istanbul\",\r\n      \"addressCountry\": \"Türkiye\",\r\n      \"addressFullAddress\": \"Beşiktaş, Istanbul\"\r\n    }\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/hotel-service/api/v1/hotels/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"hotel-service",
+								"api",
+								"v1",
+								"hotels",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Otels Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"id\":4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/hotel-service/api/v1/hotels/deletePermanently",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"hotel-service",
+								"api",
+								"v1",
+								"hotels",
+								"deletePermanently"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Room",
+			"item": [
+				{
+					"name": "Rooms Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hotelId\": 5,\r\n    \"roomNumber\": \"101\",\r\n    \"capacity\": 2,\r\n    \"pricePerNight\": 100.0,\r\n    \"description\": \"Deniz manzaralı oda\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/hotel-service/api/v1/rooms/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"hotel-service",
+								"api",
+								"v1",
+								"rooms",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findAllRooms",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/hotel-service/api/v1/rooms/findAll?page=0&size=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"hotel-service",
+								"api",
+								"v1",
+								"rooms",
+								"findAll"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Rooms Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"id\":3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/hotel-service/api/v1/rooms/deletePermanently",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"hotel-service",
+								"api",
+								"v1",
+								"rooms",
+								"deletePermanently"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reservation",
+			"item": [
+				{
+					"name": "Reservation Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIxYTBlZmQyZTY5YTdlMjU5NDMyYWJhMTUxMjFjYTFmMSIsInN1YiI6IjQyIiwiZXhwIjo5OTk5OTk5OTk5fQ.jyPdvph8OISRp6lSpafad77fqdaHe2snwJ8GsUpSU5w",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n    \"hotelId\": 1,\r\n    \"roomId\": 2,\r\n    \"guestName\": \"John Doe\",\r\n    \"checkInDate\": \"2025-05-01\",\r\n    \"checkOutDate\": \"2025-05-03\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/reservation-service/api/v1/reservations/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"reservation-service",
+								"api",
+								"v1",
+								"reservations",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reservation Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIxYTBlZmQyZTY5YTdlMjU5NDMyYWJhMTUxMjFjYTFmMSIsInN1YiI6IjQyIiwiZXhwIjo5OTk5OTk5OTk5fQ.jyPdvph8OISRp6lSpafad77fqdaHe2snwJ8GsUpSU5w",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"id\":\"3\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/reservation-service/api/v1/reservations/deletePermanently",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"reservation-service",
+								"api",
+								"v1",
+								"reservations",
+								"deletePermanently"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findAllReservations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIxYTBlZmQyZTY5YTdlMjU5NDMyYWJhMTUxMjFjYTFmMSIsInN1YiI6IjQyIiwiZXhwIjo5OTk5OTk5OTk5fQ.jyPdvph8OISRp6lSpafad77fqdaHe2snwJ8GsUpSU5w",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8000/reservation-service/api/v1/reservations/findAll?page=0&size=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"reservation-service",
+								"api",
+								"v1",
+								"reservations",
+								"findAll"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

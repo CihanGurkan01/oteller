@@ -1,0 +1,152 @@
+version: '3.8'
+
+services:
+
+  ##########################
+  # DATABASES
+  ##########################
+
+  kong-database:
+    image: postgres:13
+    container_name: kong-database
+    environment:
+      POSTGRES_USER: kong
+      POSTGRES_PASSWORD: kong
+      POSTGRES_DB: kong
+    networks:
+      - kong-net
+
+  app-database:
+    image: postgres:13
+    container_name: app-database
+    environment:
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: app_pass
+      POSTGRES_DB: otel_db
+    networks:
+      - kong-net
+
+  ##########################
+  # KONG
+  ##########################
+
+  kong-migrations:
+    image: kong:3.4
+    depends_on:
+      - kong-database
+    command: kong migrations bootstrap
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_PASSWORD: kong
+      KONG_PG_USER: kong
+    networks:
+      - kong-net
+
+  kong:
+    image: kong:3.4
+    container_name: kong
+    depends_on:
+      - kong-migrations
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: kong
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+    ports:
+      - "8000:8000"  # Proxy endpoint
+      - "8001:8001"  # Admin API
+    networks:
+      - kong-net
+
+  ##########################
+  # KAFKA & ZOOKEEPER
+  ##########################
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    networks:
+      - kafka-net
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    ports:
+      - "9092:9092"  # Optional: test için
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_CREATE_TOPICS: "reservation-created-topic:1:1"
+    depends_on:
+      - zookeeper
+    networks:
+      - kafka-net
+
+  ##########################
+  # MICROSERVICES
+  ##########################
+
+  hotel-service:
+    build:
+      context: ./hotelservice
+    container_name: hotel-service
+    expose:
+      - "8081"
+    depends_on:
+      - app-database
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://app-database:5432/otel_db
+      - SPRING_DATASOURCE_USERNAME=app_user
+      - SPRING_DATASOURCE_PASSWORD=app_pass
+    networks:
+      - kong-net
+
+  reservation-service:
+    build:
+      context: ./reservationservice
+    container_name: reservation-service
+    expose:
+      - "8082"
+    depends_on:
+      - app-database
+      - kafka
+    environment:
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://app-database:5432/otel_db
+      - SPRING_DATASOURCE_USERNAME=app_user
+      - SPRING_DATASOURCE_PASSWORD=app_pass
+      - JWT_SECRET=8a8f55026ec39b834448257f29a6b80d60ef603d5abf84716afaf3beb0ded92a
+      - RESERVATION_KAFKA_TOPIC=Create_Reservation
+    networks:
+      - kong-net
+      - kafka-net
+
+  notification-service:
+    build:
+      context: ./notificationservice
+    container_name: notification-service
+    expose:
+      - "8083"
+    depends_on:
+      - kafka
+    environment:
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - RESERVATION_KAFKA_TOPIC=Create_Reservation
+    networks:
+      - kong-net
+      - kafka-net
+
+##########################
+# NETWORKS
+##########################
+networks:
+  kong-net:
+  kafka-net:
